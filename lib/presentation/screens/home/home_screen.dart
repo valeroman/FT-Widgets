@@ -52,7 +52,7 @@ class _CustomListTile extends StatelessWidget {
     final color = Theme.of(context).colorScheme;
 
     return ListTile(
-      leading: Icon(menuItem.icon, color: color.primary),
+      leading: Icon(menuItem.icon, color: color.primary, size: 35,),
       trailing: Icon(Icons.arrow_forward_ios_outlined, color: color.primary),
       title: Text(menuItem.title),
       subtitle: Text(menuItem.subTitle),
