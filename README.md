@@ -135,3 +135,103 @@ class _CustomListTile extends StatelessWidget {
 }
 ```
 
+## Riverpod
+Documentacion: https://docs-v2.riverpod.dev/docs/getting_started
+
+- en el archivo `counter_screen.dart` colocamos el siguiente código:
+```
+import 'package:flutter/material.dart';
+
+class CounterScreen extends StatelessWidget {
+
+  static const name = 'counter_screen';
+
+  const CounterScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Counter Screen'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Valor: 10', style: Theme.of(context).textTheme.titleLarge,)
+          ],
+        )
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
+}
+
+```
+
+- Instalacción: `flutter_riverpod`.
+- En el archivo `main.dart`, colocar lo siguiente `ProviderScope`:
+```
+void main() {
+  runApp(
+    const ProviderScope(
+      child: MainApp(),
+    )
+    
+  );
+}
+```
+- Con ese widget `ProviderScope`, Riverpod va a saber donde buscar cada uno de nuestros providers de riverpod que crearemos.
+
+- Crear la carpeta en `lib -> presentation -> providers`
+- Creamos el archivo `counter_provider.dart` y agregamos lo siguiente:
+```
+// StateProvider => es un proveedor de un estado
+final counterProvider = StateProvider<int>((ref) => 5);
+```
+- Ahora cambiamos el `StatelessWidget` por `ConsumerWidget` y agregamos en el `Widget build(BuildContext context)` el `Widget build(BuildContext context, WidgetRef ref)`
+- Para mostrar el valor del `counter_provider`, agregamos ` final int clickCounter = ref.watch(counterProvider);` y `Text('Valor: $clickCounter', style: Theme.of(context).textTheme.titleLarge,)`
+
+```
+@override
+  Widget build(BuildContext context, WidgetRef ref) {
+
+    // Estar pendiente del counterProvider si cambia con el ref.watch(counterProvider)
+    final int clickCounter = ref.watch(counterProvider);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Counter Screen'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Valor: $clickCounter', style: Theme.of(context).textTheme.titleLarge,)
+          ],
+        )
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
+```
+- Para cambiar el valo al hacer click en el boton agregamos lo siguiente:
+```
+floatingActionButton: FloatingActionButton(
+  onPressed: () {
+    // No usar el watch en metodos, usr el read
+    // Para hacer un cambio en el estado usamos => .notifier
+    
+    // ref.read(counterProvider.notifier)
+    //   .update((state) => state + 1);
+    ref.read(counterProvider.notifier).state++;
+  },
+  child: const Icon(Icons.add),
+),
+```

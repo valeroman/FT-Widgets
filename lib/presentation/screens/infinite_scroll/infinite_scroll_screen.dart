@@ -56,7 +56,6 @@ class _InfiniteScrollScreenState extends State<InfiniteScrollScreen> {
     // Verifica si esta montado el componente/widget
     if ( !isMouted ) return;
     setState(() {});
-    // TODO: mover scroll
     moveScrollToBottom();
   }
 
